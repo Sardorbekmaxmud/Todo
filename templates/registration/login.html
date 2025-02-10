@@ -14,11 +14,29 @@
           <h4>Tizimga kirish</h4>
         </div>
         <div class="card-body">
-          <form method="post">
+          <form action="{% url 'login' %}" method="post">
             {% csrf_token %}
-            {{ form | crispy }}
-            <button class="btn btn-primary m-10" type="submit">Tizimga kirish</button>
+
+            <label for="validationCustomUsername" class="form-label">Foydalanuvchi nomi</label>
+            <div class="input-group has-validation">
+<!--              <span class="input-group-text" id="inputGroupPrepend">@</span>-->
+              <input name="username" type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+              <div class="invalid-feedback">
+                Iltimos, foydalanuvchi nomini tanlang!
+              </div>
+            </div>
+
+            <label for="inputPassword5" class="form-label">Parol</label>
+            <input name="password" type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" required>
+            <div class="invalid-feedback">
+                Parolingizni to'gri kiriting!
+            </div>
+
+            <button class="btn btn-success mt-3" type="submit">Tizimga kirish</button>
+
           </form>
+          <a class="btn btn-primary mt-3" href="{% url 'signup' %}">Ro'yxatdan o'tish</a>
+
         </div>
       </div>
     </div>
