@@ -1,10 +1,33 @@
-from django.shortcuts import render, reverse, redirect
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
+from django.views import generic
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 from .models import ToDo
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
+def login_required_decorator(func):
+    return login_required(function=func, login_url='login')
+
+
+class SignUpView(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/sign_up.html'
+
+
+@login_required_decorator
+def logout_(reqeust):
+    logout(request=reqeust)
+
+    return redirect('login')
+
+
 class ToDoView(LoginRequiredMixin, View):
     def get(self, request):
         todos = ToDo.objects.filter(author=request.user).order_by('-created_at',)
