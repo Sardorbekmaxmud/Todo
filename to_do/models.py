@@ -8,11 +8,23 @@ User = get_user_model()
 class ToDo(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.CharField(max_length=250, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     done = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __repr__(self):
         return self.body
 
     def __str__(self):
         return self.body
+
+
+class ToDoRepeat(models.Model):
+    todo = models.ForeignKey(ToDo, on_delete=models.CASCADE)
+    repeat_day = models.PositiveSmallIntegerField(default=None, null=True)
+
+    def __repr__(self):
+        return self.todo.body
+
+    def __str__(self):
+        return self.todo.body

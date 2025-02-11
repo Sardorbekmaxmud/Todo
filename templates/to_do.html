@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 {% load crispy_forms_tags %}
 <html lang="en">
   <head>
@@ -15,15 +15,44 @@
         </div>
         <div class="card-body ">
 
-          <form method="post">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-              <input required name="body" type="text" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2">
-              <button class="btn btn-success" type="submit" id="button-addon2">Vazifa qo'shish</button>
-            </div>
-          </form>
+          <form id="todo-form" method="post">
+          {% csrf_token %}
+            <label for="todo-body" class="form-label">Vazifa nomi:</label>
+            <input type="text" id="todo-body" name="body" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2" required>
 
-          <ol class="list-group list-group-numbered">
+            <p class="mt-1">Takrorlanish kunlari:</p>
+            <div id="repeat-days" class="btn-group rounded-pill" role="group" aria-label="Basic checkbox toggle button group">
+
+
+                <input type="checkbox" name="repeat_days" value="0" class="btn-check" id="btncheck1" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck1"> Dushanba</label>
+
+                <input type="checkbox" name="repeat_days" value="1" class="btn-check" id="btncheck2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck2"> Seshanba</label>
+
+                <input type="checkbox" name="repeat_days" value="2" class="btn-check" id="btncheck3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck3"> Chorshanba</label>
+
+                <input type="checkbox" name="repeat_days" value="3" class="btn-check" id="btncheck4" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck4"> Payshanba</label>
+
+                <input type="checkbox" name="repeat_days" value="4" class="btn-check" id="btncheck5" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck5"> Juma</label>
+
+                <input type="checkbox" name="repeat_days" value="5" class="btn-check" id="btncheck6" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck6"> Shanba</label>
+
+                <input type="checkbox" name="repeat_days" value="6" class="btn-check" id="btncheck7" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck7"> Yakshanba</label>
+            </div>
+
+
+            <div class="input-group mb-3">
+              <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifa qo'shish</button>
+            </div>
+        </form>
+
+          <ul id="todo-list" class="list-group list-group-numberedm mt-5">
             {% for todo in todos %}
               {% if todo.done %}
                 <li class="text-muted list-group-item list-group-item-dark d-flex justify-content-between align-items-start">
@@ -63,8 +92,10 @@
 
                 </li>
               {% endif %}
+            {% empty %}
+              <p class="form-label">Ayni vaqtda vazifalar ro'yxati bo'sh.</p>
             {% endfor %}
-          </ol>
+          </ul>
 
           <a href="{% url 'logout' %}" class="btn btn-warning mt-3">Tizimdan chiqish</a>
         </div>
@@ -73,6 +104,46 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        document.getElementById("todo-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const todoBody = document.getElementById("todo-body").value;
+            const selectedDays = [...document.querySelectorAll("input[name='repeat_days']:checked")]
+                                  .map(checkbox => parseInt(checkbox.value));
+
+            function getCSRFToken() {
+                const csrfCookie = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('csrftoken='));
+                return csrfCookie ? csrfCookie.split('=')[1] : '';
+            }
+
+            fetch("{% url 'to_do' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                },
+                body: JSON.stringify({
+                    body: todoBody,
+                    repeat_days: selectedDays
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const todoList = document.getElementById("todo-list");
+                const newTodo = document.createElement("li");
+                newTodo.textContent = `${data.body}`;
+                todoList.appendChild(newTodo);
+
+                document.getElementById("todo-body").value = "";
+                document.querySelectorAll("input[name='repeat_days']").forEach(cb => cb.checked = false);
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
 
   </body>
 </html>

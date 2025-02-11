@@ -1,13 +1,16 @@
+import json
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm
-from django.views import generic
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
-from .models import ToDo
-from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.views import generic
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import View
+from django.db.models import Q
+from django.utils import timezone
+from .models import ToDo, ToDoRepeat
+from .forms import CustomUserCreationForm
 
 
 # Create your views here.
@@ -30,17 +33,41 @@ def logout_(reqeust):
 
 class ToDoView(LoginRequiredMixin, View):
     def get(self, request):
-        todos = ToDo.objects.filter(author=request.user).order_by('-created_at',)
-        return render(request=request, template_name='to_do.html', context={'todos': todos})
+        today_week_num = timezone.now().weekday()
+
+        todos = (ToDo.objects.prefetch_related('todorepeat_set').filter(
+            Q(author=request.user) &
+            (Q(todorepeat__repeat_day=today_week_num) | Q(todorepeat__repeat_day=None))
+        ).order_by('-created_at', ))
+        # print(todos.query)
+        # print(todos)
+        return render(request=request, template_name='to_do.html', context={'todos': todos}, status=200)
 
     def post(self, request):
-        body = request.POST.get('body')
-        if body:
-            ToDo.objects.create(
-                author=request.user,
-                body=body
-            )
-        return redirect('to_do')
+        data = json.loads(request.body)
+
+        body = data.get('body')
+
+        if not body:
+            return JsonResponse({"error": "Vazifa nomi bo‘lishi shart!"}, status=400)
+
+        todo = ToDo.objects.create(author=request.user, body=body)
+
+        # Tanlangan haftalik kunlar uchun `ToDoRepeat` obyektlari yaratish
+        repeat_days = data.get('repeat_days', [])
+        ToDoRepeat.objects.bulk_create([
+            ToDoRepeat(todo=todo, repeat_day=day) for day in repeat_days
+        ])
+
+        return JsonResponse({"body": todo.body})
+
+        # body = request.POST.get('body')
+        # if body:
+        #     ToDo.objects.create(
+        #         author=request.user,
+        #         body=body
+        #     )
+        # return redirect('to_do')
 
 
 class ToDoActionView(LoginRequiredMixin, View):
