@@ -9,7 +9,7 @@ class ToDoAdmin(admin.ModelAdmin):
     list_filter = ('done', 'created_at', 'author')
     search_fields = ('body', 'author__username')
     ordering = ('created_at',)
-    readonly_fields = ['created_at']
+    readonly_fields = ['created_at', 'updated_at']
 
 
 @admin.register(ToDoRepeat)

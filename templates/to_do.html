@@ -5,9 +5,76 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vazifalar</title>
+    <link rel="icon" type="image/png" href="/media/images/todo_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body.dark-mode {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+
   </head>
-  <body style="background-image: url('https://cdn.culture.ru/images/5380f99f-003a-5727-a4d0-8ccd8fe6fa4a'); background-repeat: repeat; width: 100%; height:auto;">
+  <body style="background-image: url('https://lastfm.freetls.fastly.net/i/u/ar0/9ea234deeb96d88aa4ca589011a37e1c.jpg'); background-repeat: repeat; width: 100%; height:auto;">
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+<!--        <a class="navbar-brand" href="{% url 'to_do' %}">ToDo</a>-->
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                  <button id="themeToggle" class="btn btn-dark">
+                      <i id="themeIcon" class="fa-solid fa-moon"></i>
+                  </button>
+              </li>
+<!--              <li class="nav-item dropdown">-->
+<!--                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                    Dropdown-->
+<!--                  </a>-->
+<!--                  <ul class="dropdown-menu">-->
+<!--                    <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--                    <li><hr class="dropdown-divider"></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--                  </ul>-->
+<!--                </li>-->
+<!--              <li class="nav-item">-->
+<!--                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>-->
+<!--              </li>-->
+
+
+          </ul>
+
+
+
+          <a href="{% url 'logout' %}" class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="left"  title="Tizimdan chiqish">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+
+<!--          <form name='search' class="d-flex" role="search">-->
+<!--          {% csrf_token %}-->
+<!--            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+<!--            <button class="btn btn-outline-success" type="submit">Search</button>-->
+<!--          </form>-->
+        </div>
+      </div>
+    </nav>
+
+    <!--    <div class="container mt-3">-->
+    <!--        <button style="" onclick="document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark')">-->
+    <!--            <i style="opacity: 100%" class="btn btn-light bi bi-brightness-high-fill">Light</i> | <i class="btn btn-dark bi bi-moon-fill">Dark</i>-->
+    <!--        </button>-->
+    <!--    </div>-->
+
+
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
         <div class="card-header">
@@ -17,34 +84,57 @@
 
           <form id="todo-form" method="post">
           {% csrf_token %}
-            <label for="todo-body" class="form-label">Vazifa nomi:</label>
+            <label for="todo-body" class="form-label fw-bold">Vazifa nomi:</label>
             <input type="text" id="todo-body" name="body" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2" required>
 
-            <p class="mt-1">Takrorlanish kunlari:</p>
-            <div id="repeat-days" class="btn-group rounded-pill" role="group" aria-label="Basic checkbox toggle button group">
-
-
-                <input type="checkbox" name="repeat_days" value="0" class="btn-check" id="btncheck1" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck1"> Dushanba</label>
-
-                <input type="checkbox" name="repeat_days" value="1" class="btn-check" id="btncheck2" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck2"> Seshanba</label>
-
-                <input type="checkbox" name="repeat_days" value="2" class="btn-check" id="btncheck3" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck3"> Chorshanba</label>
-
-                <input type="checkbox" name="repeat_days" value="3" class="btn-check" id="btncheck4" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck4"> Payshanba</label>
-
-                <input type="checkbox" name="repeat_days" value="4" class="btn-check" id="btncheck5" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck5"> Juma</label>
-
-                <input type="checkbox" name="repeat_days" value="5" class="btn-check" id="btncheck6" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck6"> Shanba</label>
-
-                <input type="checkbox" name="repeat_days" value="6" class="btn-check" id="btncheck7" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck7"> Yakshanba</label>
+            <p class="form-label fw-bold mt-2">Takrorlanish kunlari:</p>
+              <div id="repeat-days" class="container mt-3">
+                <div class="row">
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="monday" name="repeat_days" value="0">
+                            <label class="form-check-label" for="monday">Dushanba</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="tuesday" name="repeat_days" value="1">
+                            <label class="form-check-label" for="tuesday">Seshanba</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="wednesday" name="repeat_days" value="2">
+                            <label class="form-check-label" for="wednesday">Chorshanba</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="thursday" name="repeat_days" value="3">
+                            <label class="form-check-label" for="thursday">Payshanba</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="friday" name="repeat_days" value="4">
+                            <label class="form-check-label" for="friday">Juma</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="saturday" name="repeat_days" value="5">
+                            <label class="form-check-label" for="saturday">Shanba</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="sunday" name="repeat_days" value="6">
+                            <label class="form-check-label" for="sunday">Yakshanba</label>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
 
             <div class="input-group mb-3">
@@ -59,14 +149,18 @@
 
                   <div class="ms-2 me-auto">
                     <div class="fw-bold"><del>{{ todo.body }}</del></div>
-                    {{ todo.created_at|date:'d.m.Y H:i:m' }}
+                    {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
 
-                  <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning badge rounded-pill m-1">Taxrirlash</a>
+                  <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning m-1">
+                      <i class="bi bi-pencil-fill"></i>
+                  </a>
 
                   <form action="{% url 'action' todo.id 'delete' %}" method="post">
                     {% csrf_token %}
-                    <button class="btn btn-danger badge rounded-pill m-1">O'chirish</button>
+                    <button class="btn btn-danger m-1">
+                        <i class="bi bi-trash"></i>
+                    </button>
                   </form>
 
                 </li>
@@ -75,19 +169,24 @@
 
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">{{ todo.body }}</div>
-                    {{ todo.created_at|date:'d.m.Y H:i:m' }}
+                    {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
 
                   <form action="{% url 'action' todo.id 'done' %}" method="post">
                     {% csrf_token %}
-                    <button class="btn btn-success badge rounded-pill m-1">Bajarildi</button>
+                    <button class="btn btn-success m-1">
+                        <i class="bi bi-check-all"></i>
+                    </button>
                   </form>
 
-                  <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning badge rounded-pill m-1">Taxrirlash</a>
+                  <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning m-1">
+                      <i class="bi bi-pencil-fill"></i>
+                  </a>
 
                   <form action="{% url 'action' todo.id 'delete' %}" method="post">
                       {% csrf_token %}
-                      <button class="btn btn-danger badge rounded-pill m-1">O'chirish</button>
+                      <button class="btn btn-danger m-1">
+                          <i class="bi bi-trash"></i></button>
                   </form>
 
                 </li>
@@ -97,7 +196,6 @@
             {% endfor %}
           </ul>
 
-          <a href="{% url 'logout' %}" class="btn btn-warning mt-3">Tizimdan chiqish</a>
         </div>
 
       </div>
@@ -106,42 +204,81 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-        document.getElementById("todo-form").addEventListener("submit", function(event) {
-            event.preventDefault();
+        document.getElementById('todo-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Formaning odatiy submit jarayonini to'xtatish
 
-            const todoBody = document.getElementById("todo-body").value;
-            const selectedDays = [...document.querySelectorAll("input[name='repeat_days']:checked")]
-                                  .map(checkbox => parseInt(checkbox.value));
+            // Inputdan vazifa nomini olish
+            const taskBody = document.getElementById('todo-body').value.trim();
 
-            function getCSRFToken() {
-                const csrfCookie = document.cookie
-                    .split('; ')
-                    .find(row => row.startsWith('csrftoken='));
-                return csrfCookie ? csrfCookie.split('=')[1] : '';
+            // Tanlangan kunlarni yig'ish
+            const repeatDays = [];
+            document.querySelectorAll('input[name="repeat_days"]:checked').forEach(function(checkbox) {
+                repeatDays.push(checkbox.value);
+            });
+
+            // Agar vazifa nomi bo'sh bo'lmasa
+            if (taskBody !== '') {
+                // AJAX so'rovini yuborish
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '{% url 'to_do' %}', true); // Serverga so'rov yuborish
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}'); // CSRF tokenini yuborish
+
+
+                // Serverga yuboriladigan ma'lumotlar
+                const data = JSON.stringify({
+                    body: taskBody,
+                    repeat_days: repeatDays
+                });
+
+                xhr.send(data);
+            }
+        });
+
+    </script>
+
+<!--    Yangi vazifa qo'shsa page ni yangilab beradi-->
+    <script>
+        document.getElementById("todo-form").addEventListener("submit", function() {
+            setTimeout(() => {
+                location.reload();
+            }, 100); // 0.5 soniya kutib yangilaydi
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const themeToggle = document.getElementById("themeToggle");
+            const themeIcon = document.getElementById("themeIcon");
+
+            // Oldingi tanlangan mavzuni o‘qib olish
+            let savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-bs-theme", savedTheme);
+
+            // Agar oldingi rejim dark bo‘lsa, ikonani o‘zgartiramiz
+            if (savedTheme === "dark") {
+                themeIcon.classList.replace("fa-moon", "fa-sun");
             }
 
-            fetch("{% url 'to_do' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCSRFToken()
-                },
-                body: JSON.stringify({
-                    body: todoBody,
-                    repeat_days: selectedDays
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const todoList = document.getElementById("todo-list");
-                const newTodo = document.createElement("li");
-                newTodo.textContent = `${data.body}`;
-                todoList.appendChild(newTodo);
+            // Tugmani bosganda rejimni o‘zgartirish
+            themeToggle.addEventListener("click", function () {
+                let currentTheme = document.documentElement.getAttribute("data-bs-theme");
+                let newTheme = currentTheme === "dark" ? "light" : "dark";
 
-                document.getElementById("todo-body").value = "";
-                document.querySelectorAll("input[name='repeat_days']").forEach(cb => cb.checked = false);
-            })
-            .catch(error => console.error("Error:", error));
+                // Mavzuni o‘zgartirish
+                document.documentElement.setAttribute("data-bs-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
+
+                // Ikonani o‘zgartirish
+                themeIcon.classList.replace(newTheme === "dark" ? "fa-moon" : "fa-sun", newTheme === "dark" ? "fa-sun" : "fa-moon");
+            });
+        });
+    </script>
+
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     </script>
 
