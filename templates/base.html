@@ -1,0 +1,151 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/media/images/todo_logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <style>
+            body.dark-mode {
+                background-color: #343a40;
+                color: white;
+            }
+    </style>
+
+  </head>
+  <body style="background-blend-mode: multiply; background-color: rgba(0,0,0,0.3); background-image: url('https://i.pinimg.com/originals/d2/35/01/d2350155f30ad946907bcb7a730cfeca.jpg'); background-repeat: repeat; width: 100%; height:auto;">
+    {% block content %}
+
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      document.getElementById('todo-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Formaning odatiy submit jarayonini to'xtatish
+        // Inputdan vazifa nomini olish
+        const taskBody = document.getElementById('todo-body').value.trim();
+
+        // Tanlangan kunlarni yig'ish
+        const repeatDays = [];
+        document.querySelectorAll('input[name="repeat_days"]:checked').forEach(function(checkbox) {
+        repeatDays.push(checkbox.value);
+        });
+
+        // Agar vazifa nomi bo'sh bo'lmasa
+        if (taskBody !== '') {
+        // AJAX so'rovini yuborish
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '{% url 'to_do' %}', true); // Serverga so'rov yuborish
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}'); // CSRF tokenini yuborish
+
+        // Serverga yuboriladigan ma'lumotlar
+                      const data = JSON.stringify({
+                          body: taskBody,
+                          repeat_days: repeatDays
+                      });
+
+                      xhr.send(data);
+                  }
+              });
+      </script>
+
+  <!--    Yangi vazifa qo'shsa page ni yangilab beradi-->
+      <script>
+          document.getElementById("todo-form").addEventListener("submit", function() {
+              setTimeout(() => {
+                  location.reload();
+              }, 100); // 0.5 soniya kutib yangilaydi
+          });
+      </script>
+
+      <script>
+          document.addEventListener("DOMContentLoaded", function () {
+              const themeToggle = document.getElementById("themeToggle");
+              const themeIcon = document.getElementById("themeIcon");
+
+              // Oldingi tanlangan mavzuni o‘qib olish
+              let savedTheme = localStorage.getItem("theme") || "light";
+              document.documentElement.setAttribute("data-bs-theme", savedTheme);
+
+              // Agar oldingi rejim dark bo‘lsa, ikonani o‘zgartiramiz
+              if (savedTheme === "dark") {
+                  themeIcon.classList.replace("fa-moon", "fa-sun");
+              }
+
+              // Tugmani bosganda rejimni o‘zgartirish
+              themeToggle.addEventListener("click", function () {
+                  let currentTheme = document.documentElement.getAttribute("data-bs-theme");
+                  let newTheme = currentTheme === "dark" ? "light" : "dark";
+
+                  // Mavzuni o‘zgartirish
+                  document.documentElement.setAttribute("data-bs-theme", newTheme);
+                  localStorage.setItem("theme", newTheme);
+
+                  // Ikonani o‘zgartirish
+                  themeIcon.classList.replace(newTheme === "dark" ? "fa-moon" : "fa-sun", newTheme === "dark" ? "fa-sun" : "fa-moon");
+              });
+          });
+      </script>
+
+      <script>
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+          var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl);
+          });
+      </script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const calendarControl = new CalendarControl();
+        });
+      </script>
+
+<!--      <script>-->
+<!--          function generateCalendar(year, month, completedDays) {-->
+<!--              let calendarDiv = document.getElementById("calendar");-->
+<!--              calendarDiv.innerHTML = "";  // Avvalgi kalendardan tozalash-->
+
+<!--              let date = new Date(year, month, 1);-->
+<!--              let firstDay = date.getDay();-->
+<!--              let daysInMonth = new Date(year, month + 1, 0).getDate();-->
+
+<!--              for (let i = 0; i < firstDay; i++) {-->
+<!--                  let emptyDiv = document.createElement("div");-->
+<!--                  emptyDiv.classList.add("day");-->
+<!--                  calendarDiv.appendChild(emptyDiv);-->
+<!--              }-->
+
+<!--              for (let day = 1; day <= daysInMonth; day++) {-->
+<!--                  let dayDiv = document.createElement("div");-->
+<!--                  dayDiv.classList.add("day");-->
+<!--                  dayDiv.innerText = day;-->
+
+<!--                  if (completedDays.includes(day)) {-->
+<!--                      dayDiv.classList.add("done");  // Bajarilgan kun-->
+<!--                  } else {-->
+<!--                      dayDiv.classList.add("not-done");  // Bajarilmagan kun-->
+<!--                  }-->
+
+<!--                  calendarDiv.appendChild(dayDiv);-->
+<!--              }-->
+<!--          }-->
+
+<!--          // Bajarilgan kunlar ro'yxati (Backenddan keladigan ma'lumot)-->
+<!--          //let completedTodos = JSON.parse("{{ completed_tasks|safe }}");-->
+<!--           let completedTodos = [2, 5, 9, 15, 22];-->
+<!--          generateCalendar(2025, 1, completedTodos);-->
+<!--      </script>-->
+  </body>
+</html>
