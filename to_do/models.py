@@ -20,7 +20,7 @@ class ToDo(models.Model):
 
 
 class ToDoRepeat(models.Model):
-    todo = models.ForeignKey(ToDo, on_delete=models.CASCADE)
+    todo = models.ForeignKey(ToDo, on_delete=models.CASCADE, related_name='todo_repeats')
     repeat_day = models.PositiveSmallIntegerField(default=None, null=True)
 
     def __repr__(self):
@@ -28,3 +28,9 @@ class ToDoRepeat(models.Model):
 
     def __str__(self):
         return self.todo.body
+
+
+class ToDoHistory(models.Model):
+    todo = models.ForeignKey(ToDo, on_delete=models.CASCADE, related_name='todo_histories')
+    complete_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

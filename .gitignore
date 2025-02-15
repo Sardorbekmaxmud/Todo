@@ -175,3 +175,6 @@ staticfiles/
 staticfiles
 media/
 media
+
+*.bat
+reset_todos.bat
