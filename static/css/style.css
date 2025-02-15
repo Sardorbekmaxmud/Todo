@@ -157,3 +157,33 @@
   border: 1px solid transparent;
   pointer-events: none;
 }
+
+/* my styles */
+
+/*.login {
+  background-image: url(./static/images/golden_gate_bridge.jpg);
+} */
+
+.detail {
+  background-image: url('https://i.ytimg.com/vi/PtsrQb7_RLo/maxresdefault.jpg');
+}
+
+a {
+    color: #DEE2E6; /* Light mode uchun */
+    text-decoration: none; /* Tagiga chiziq chiqmasin */
+}
+
+a:hover {
+    color: #0056b3; /* Hover qilinganda */
+}
+
+/* Dark mode uchun */
+@media (prefers-color-scheme: dark) {
+    a {
+        color: #212529; /* Masalan, to‘q sariq */
+    }
+
+    a:hover {
+        color: #e65100;
+    }
+}
