@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.utils import timezone
 from django.http import JsonResponse
 import json
 
 from to_do.models import ToDo, ToDoRepeat, ToDoHistory
+from to_do.services import get_todo_yearly_statistics
 
 
 class ToDoView(LoginRequiredMixin, View):
@@ -74,39 +75,3 @@ class ToDoEditView(LoginRequiredMixin, View):
             if body:
                 ToDo.objects.filter(pk=todo_id, author=request.user).update(body=body)
             return redirect('to_do')
-
-
-class ToDoDetailView(LoginRequiredMixin, View):
-    def get(self, request, todo_id):
-        todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
-
-        # Yillik statistik ma’lumotlar
-        yearly_data = [
-            {"year": 2023, "completed": 45, "pending": 20},
-            {"year": 2024, "completed": 50, "pending": 30},
-            {"year": 2025, "completed": 70, "pending": 25}
-        ]
-
-        # Oylik statistik ma’lumotlar
-        monthly_data = [
-            {"month": "Yanvar", "completed": 5, "pending": 2},
-            {"month": "Fevral", "completed": 8, "pending": 4},
-            {"month": "Mart", "completed": 12, "pending": 6},
-            {"month": "Aprel", "completed": 15, "pending": 7},
-            {"month": "May", "completed": 10, "pending": 5},
-            {"month": "Iyun", "completed": 20, "pending": 8},
-            {"month": "Iyul", "completed": 18, "pending": 10},
-            {"month": "Avgust", "completed": 22, "pending": 12},
-            {"month": "Sentabr", "completed": 19, "pending": 11},
-            {"month": "Oktabr", "completed": 17, "pending": 9},
-            {"month": "Noyabr", "completed": 25, "pending": 10},
-            {"month": "Dekabr", "completed": 30, "pending": 15}
-        ]
-
-        context = {
-            "todo": todo,
-            "yearly_data": json.dumps(yearly_data),
-            "monthly_data": json.dumps(monthly_data)
-        }
-
-        return render(request, "todo/detail.html", context)
