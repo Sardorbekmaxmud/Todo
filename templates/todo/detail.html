@@ -43,11 +43,11 @@
         <!-- Vazifa haqida ma'lumot -->
         <div class="card p-3 mb-4">
             <h5>Vazifangiz haqida to'liq ma'lumot:</h5>
-            <p><strong>Yaratuvchi:</strong> <i>{{ todo.author.username }}</i></p>
+            <p><strong>Yaratuvchi:</strong> <i>{{ todo.username }}</i></p>
             <p><strong>Yaratilgan sanasi:</strong> <i>{{ todo.created_at|date:'d.m.Y H:i' }}</i></p>
             <p><strong>Oxirgi o'zgarish sanasi:</strong> <i>{{ todo.updated_at|date:'d.m.Y H:i' }}</i></p>
             <p><strong>Hozirgi holati:</strong>
-                {% if todo.done %}
+                {% if todo.status %}
                     ✅<i> Bajarilgan</i>
                 {% else %}
                     ❌<i> Bajarilmagan</i>

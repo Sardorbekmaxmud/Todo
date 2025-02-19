@@ -8,7 +8,6 @@ User = get_user_model()
 class ToDo(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.CharField(max_length=250, null=True, blank=True)
-    done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -32,5 +31,9 @@ class ToDoRepeat(models.Model):
 
 class ToDoHistory(models.Model):
     todo = models.ForeignKey(ToDo, on_delete=models.CASCADE, related_name='todo_histories')
-    complete_date = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(null=True)
+    date = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('todo', 'date', 'status')
