@@ -14,10 +14,10 @@ class ToDoView(LoginRequiredMixin, View):
     def get(self, request):
         today_week_num = timezone.now().weekday()
 
-        todos = (ToDo.objects.prefetch_related('todo_histories', 'todo_repeats').filter(
+        todos = (ToDo.objects.prefetch_related('todo_repeats').filter(
             Q(author=request.user) &
             (Q(todo_repeats__repeat_day=today_week_num) | Q(todo_repeats__repeat_day=None))
-        ).order_by('todo_histories__status', 'body').values('id', 'body', 'created_at', 'todo_histories__status'))
+        ).order_by('status', 'body').values('id', 'body', 'created_at', 'status'))
 
         return render(request=request, template_name='todo/index.html', context={'todos': todos})
 
@@ -53,14 +53,16 @@ class ToDoActionView(LoginRequiredMixin, View):
         todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
         if todo:
             if action == 'done':
+                todo.status = True
+                todo.save()
+
                 todo_history, created = ToDoHistory.objects.get_or_create(
                     todo=todo,
                     date=timezone.now().date()
                 )
-                if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
-                    messages.error(request, "Bajarilmagan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
-                    return redirect('to_do')
-                    # return JsonResponse({'error': 'Bajarilmagan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.'})
+                # if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
+                #     messages.error(request, "Bajarilmagan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
+                #     return redirect('to_do')
 
                 todo_history.status = True
                 todo_history.save()
@@ -81,14 +83,17 @@ class ToDoEditView(LoginRequiredMixin, View):
             if action == 'not_done':
                 todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
 
+                todo.status = False
+                todo.save()
+
                 todo_history, created = ToDoHistory.objects.get_or_create(
                     todo=todo,
                     date=timezone.now().date()
                 )
 
-                if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
-                    messages.error(request, "Bajarilgan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
-                    return redirect('edit', todo.id, 'none')
+                # if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
+                #     messages.error(request, "Bajarilgan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
+                #     return redirect('edit', tod.id, 'none')
 
                 todo_history.status = False
                 todo_history.save()

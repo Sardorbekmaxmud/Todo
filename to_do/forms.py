@@ -16,9 +16,9 @@ class CustomUserCreationForm(UserCreationForm):
                                                              'class': 'form-control',
                                                              }))
     password1 = forms.CharField(max_length=50,
-                                help_text="Parolingiz kamida 8 ta belgidan iborat boʻlishi kerak. Sizning parolingiz tez-tez ishlatiladigan parol bo'lishi mumkin emas. Sizning parolingiz to'liq raqamli bo'lishi mumkin emas.",
+                                help_text="Parolingiz kamida 8 ta belgidan iborat boʻlishi kerak. Sizning parolingiz tez-tez ishlatiladigan parol bo'lishi mumkin emas. Sizning parolingiz to'liq raqamli bo'lishi mumkin emas!",
                                 required=True,
-                                label="Parolni takrorlang:",
+                                label="Parol:",
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Parol',
                                                                   'class': 'form-control',
                                                                   'data-toggle': 'password1',
@@ -26,9 +26,9 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'name': 'password1',
                                                                   }))
     password2 = forms.CharField(max_length=50,
-                                help_text='Verifikatsiya uchun oldin kiritgan parolingizni kiriting.',
+                                help_text='Verifikatsiya uchun oldin kiritgan parolingizni kiriting!',
                                 required=True,
-                                label="Parol:",
+                                label="Parolni takrorlang:",
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Parol',
                                                                   'class': 'form-control',
                                                                   'data-toggle': 'password2',
