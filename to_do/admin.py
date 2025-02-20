@@ -5,10 +5,10 @@ from .models import ToDo, ToDoRepeat, ToDoHistory
 # Register your models here.
 @admin.register(ToDo)
 class ToDoAdmin(admin.ModelAdmin):
-    list_display = ('author', 'body', 'created_at', 'updated_at')
-    list_filter = ('created_at', 'author__username')
+    list_display = ('author', 'body', 'status', 'created_at', 'updated_at')
+    list_filter = ('status', 'created_at', 'author__username')
     search_fields = ('body', 'author__username')
-    ordering = ('created_at',)
+    ordering = ('status', 'created_at')
     readonly_fields = ['created_at', 'updated_at']
 
 
@@ -23,7 +23,7 @@ class ToDoRepeatAdmin(admin.ModelAdmin):
 class ToDoHistoryAdmin(admin.ModelAdmin):
     list_display = ('todo__body', 'status', 'date', 'updated_at')
     list_filter = ('date', 'status', 'todo__body')
-    ordering = ('status', 'date')
+    ordering = ('date',)
     readonly_fields = ['date', 'updated_at']
 
     class Meta:

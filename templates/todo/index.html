@@ -37,27 +37,7 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>
             </li>
-<!--              <li class="nav-item dropdown">-->
-<!--                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                    Dropdown-->
-<!--                  </a>-->
-<!--                  <ul class="dropdown-menu">-->
-<!--                      <li class="dropdown-item">-->
-<!--                          <button id="themeToggle" class="btn btn-dark">-->
-<!--                              <i id="themeIcon" class="fa-solid fa-moon"></i>-->
-<!--                          </button>-->
-<!--                      </li>-->
-
-<!--                    <li><a class="dropdown-item" href="#">Action</a></li>-->
-<!--                    <li><a class="dropdown-item" href="#">Another action</a></li>-->
-
           </ul>
-
-<!--          <form name='search' class="d-flex" role="search">-->
-<!--          {% csrf_token %}-->
-<!--                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--                <button class="btn btn-outline-success" type="submit">Search</button>-->
-<!--          </form>-->
 
           <button id="themeToggle" class="btn btn-dark ms-3">
               <i id="themeIcon" class="fa-solid fa-moon"></i>
@@ -136,66 +116,169 @@
             </div>
 
             <div class="input-group mb-3">
-              <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifa qo'shish</button>
+              <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifani qo'shish</button>
             </div>
         </form>
 
           <ul id="todo-list" class="list-group list-group-numberedm mt-5">
             {% for todo in todos %}
-              {% if todo.todo_histories__status %}
+              {% if todo.status %}
 
                 <li class="text-muted list-group-item list-group-item-dark d-flex justify-content-between align-items-start">
 
                   <div class="ms-2 me-auto">
-                    <div class="fw-bold"><del>{{ todo.body }}</del></div>
+                    <div class="fw-bold">
+                        <del>{{ todo.body }}</del>
+<!--                        <del>{{ tod.body|truncatechars:18 }}</del>-->
+                    </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
 
-                  <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info m-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
-                      <i class="bi bi-search"></i>
-                  </a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <!-- Katta ekranda ko‘rinadigan tugmalar -->
+                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                          <i class="bi bi-search"></i>
+                        </a>
 
-                  <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning m-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="Taxrirlash">
-                      <i class="bi bi-pencil-fill"></i>
-                  </a>
+                        <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                        {% csrf_token %}
+                            <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
+                              <i class="bi bi-x-circle"></i>
+                            </button>
+                        </form>
 
-                  <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                    {% csrf_token %}
-                    <button class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="O'chirish">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
+                        <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="Taxrirlash">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+
+                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="O'chirish">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
+                        <!-- Telefon ekranda ko‘rinadigan dropdown -->
+                        <div class="dropdown d-sm-none">
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown">
+                                <img style="width: 20px; height: 20px; object-fit: contain;" src="/media/images/down-arrow_10255603.png" alt="dropdown">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                                        Batafsil
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #d63384;" class="dropdown-item">
+                                          Bajarilmadi
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
+                                        Taxrirlash
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #ff1900;" class="dropdown-item">
+                                            O'chirish
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                 </li>
               {% else %}
                 <li class="list-group-item d-flex justify-content-between align-items-start">
 
                   <div class="ms-2 me-auto">
-                    <div class="fw-bold">{{ todo.body }}</div>
+                    <div class="fw-bold">
+                        {{ todo.body }}
+<!--                        {{ tod.body|truncatechars:18 }}-->
+                    </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
 
-                  <form action="{% url 'action' todo.id 'done' %}" method="post">
-                    {% csrf_token %}
 
-                    <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info m-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
-                        <i class="bi bi-search"></i>
-                    </a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <!-- Katta ekranda ko‘rinadigan tugmalar -->
+                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                            <i class="bi bi-search"></i>
+                        </a>
+                        <form action="{% url 'action' todo.id 'done' %}" method="post">
+                        {% csrf_token %}
+                            <button class="btn btn-success d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarildi">
+                                <i class="bi bi-check-all"></i>
+                            </button>
+                        </form>
+                        <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                        {% csrf_token %}
+                            <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
+                              <i class="bi bi-x-circle"></i>
+                            </button>
+                        </form>
 
-                    <button class="btn btn-success m-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarildi">
-                        <i class="bi bi-check-all"></i>
-                    </button>
-                  </form>
+                        <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxrirlash">
+                          <i class="bi bi-pencil-fill"></i>
+                        </a>
 
-                  <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning m-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxrirlash">
-                      <i class="bi bi-pencil-fill"></i>
-                  </a>
+                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                        {% csrf_token %}
+                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="O'chirish">
+                                  <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
 
-                  <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                      {% csrf_token %}
-                      <button class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="top" title="O'chirish">
-                          <i class="bi bi-trash"></i></button>
-                  </form>
+                        <!-- Telefon ekranda ko‘rinadigan dropdown -->
+                        <div class="dropdown d-sm-none">
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown">
+                                <img style="width: 20px; height: 20px; object-fit: contain;" src="/media/images/down-arrow_10255603.png" alt="dropdown">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item">
+                                        Batafsil
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{% url 'action' todo.id 'done' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #00ff0b;" class="dropdown-item">
+                                            Bajarildi
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #d63384;" class="dropdown-item">
+                                          Bajarilmadi
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
+                                        Taxrirlash
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #ff1900;" class="dropdown-item">
+                                            O'chirish
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
                 </li>
               {% endif %}
