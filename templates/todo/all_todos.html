@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Barcha Vazifalar {% endblock %}
+
+{% block background_image %}
+    background-image: url('https://i.pinimg.com/originals/5f/36/bd/5f36bd6b967296f6deb0c780dccecc36.gif');
+{% endblock %}
+
+{% block content %}
+    <nav class="shadow navbar navbar-expand-lg bg-primary-subtle text-primary-emphasis">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'to_do' %}">
+            <img style="width: 45px; height: auto;" src="/media/images/todo_logo.png" alt="ToDo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
+            </li>
+          </ul>
+
+          <button id="themeToggle" class="btn btn-dark ms-3">
+              <i id="themeIcon" class="fa-solid fa-moon"></i>
+          </button>
+
+          <a href="{% url 'logout' %}" class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+
+        </div>
+      </div>
+    </nav>
+
+    <div style="opacity: 80%" class="container mt-5">
+          <div class="card">
+            <div class="card-header">
+              <h4>Barcha Vazifalaringiz Ro'yxati</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-numbered mt-5">
+                {% for todo in all_todos %}
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                        {{ todo.body }}
+<!--                        {{ tod.body|truncatechars:18 }}-->
+                    </div>
+                    {{ todo.created_at|date:'d.m.Y H:i' }}
+                  </div>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <!-- Katta ekranda ko‘rinadigan tugmalar -->
+                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                          <i class="bi bi-search"></i>
+                        </a>
+
+                        <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="Taxrirlash">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+
+                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="O'chirish">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
+                        <!-- Telefon ekranda ko‘rinadigan dropdown -->
+                        <div class="dropdown d-sm-none">
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown">
+                                <img style="width: 20px; height: 20px; object-fit: contain;" src="/media/images/down-arrow_10255603.png" alt="dropdown">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                                        Batafsil
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
+                                        Taxrirlash
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                                    {% csrf_token %}
+                                        <button style="color: #ff1900;" class="dropdown-item">
+                                            O'chirish
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </li>
+              {% empty %}
+                <p class="form-label">Ayni vaqtda vazifalar ro'yxati bo'sh.</p>
+              {% endfor %}
+          </ul>
+
+        </div>
+      </div>
+    </div>
+{% endblock %}

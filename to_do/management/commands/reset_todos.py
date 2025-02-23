@@ -13,5 +13,5 @@ class Command(BaseCommand):
 
         updated_count = ToDo.objects.prefetch_related('todo_repeats').filter(
             Q(todo_repeats__repeat_day=today_week_num) &
-            Q(status=True)).update(status=None)
+            Q(status=True) | Q(status=False)).update(status=None)
         self.stdout.write(self.style.SUCCESS(f"{updated_count} ta todo qayta faollashtirildi."))

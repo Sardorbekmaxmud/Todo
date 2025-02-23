@@ -7,16 +7,17 @@ from django.db.models.functions import TruncYear, TruncMonth
 from django.utils import timezone
 import json
 
-from to_do.models import ToDo
-from to_do.services import get_todo_by_id
+from to_do.models import ToDo, ToDoRepeat
 
 
 class ToDoDetailView(LoginRequiredMixin, View):
     def get(self, request, todo_id):
-        todo = get_todo_by_id(todo_id)
+        todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
 
-        todo['created_at'] = timezone.localtime(timezone.make_aware(todo['created_at']))
-        todo['updated_at'] = timezone.localtime(timezone.make_aware(todo['updated_at']))
+        todo_repeat = ToDoRepeat.objects.filter(todo=todo)
+
+        uz_weeks = {0: 'Dushanba', 1: 'Seshanba', 2: 'Chorshanba', 3: 'Payshanba', 4: 'Juma', 5: 'Shanba', 6: 'Yakshanba'}
+        repeat_days = [uz_weeks[day.repeat_day] for day in todo_repeat]
 
         yearly_statistics = (
             ToDo.objects.prefetch_related('todo_histories')
@@ -65,6 +66,7 @@ class ToDoDetailView(LoginRequiredMixin, View):
 
         context = {
             "todo": todo,
+            "repeat_days": repeat_days,
             "yearly_data": json.dumps(yearly_data),
             "monthly_data": json.dumps(monthly_data)
         }

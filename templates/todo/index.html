@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Vazifalar {% endblock %}
+{% block title %} Bugungi Vazifalar {% endblock %}
 
 {% block background_image %}
-    background-image: url('https://i.pinimg.com/originals/d2/35/01/d2350155f30ad946907bcb7a730cfeca.jpg');
+    background-image: url('https://steamuserimages-a.akamaihd.net/ugc/1644339686433514008/B0CD0FAE85EA41DD8C11B3C38E3C4DE4C602F646/?imw=512&amp;imh=309&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true');
 {% endblock %}
 
 {% block content %}
@@ -37,6 +37,9 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
+            </li>
           </ul>
 
           <button id="themeToggle" class="btn btn-dark ms-3">
@@ -54,7 +57,7 @@
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
         <div class="card-header">
-          <h4>Vazifalar Ro'yxati</h4>
+          <h4>Bugungi Vazifalaringiz Ro'yxati</h4>
         </div>
         <div class="card-body ">
 
@@ -120,7 +123,7 @@
             </div>
         </form>
 
-          <ul id="todo-list" class="list-group list-group-numberedm mt-5">
+          <ul id="todo-list" class="list-group list-group-numbered mt-5">
             {% for todo in todos %}
               {% if todo.status %}
 
@@ -282,14 +285,14 @@
 
                 </li>
               {% endif %}
+
             {% empty %}
               <p class="form-label">Ayni vaqtda vazifalar ro'yxati bo'sh.</p>
             {% endfor %}
           </ul>
 
-        </div>
-
       </div>
+    </div>
     </div>
 
     <script>
