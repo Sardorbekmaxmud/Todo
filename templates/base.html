@@ -25,10 +25,9 @@
             background-repeat: repeat; /* no-repeat; */
             height: 100vh;
             width: 100%;
-            opacity: 85%;
         }
         body.dark-mode {
-            background-color: #343a40;
+            background-color: #080808;
             color: white;
         }
     </style>
@@ -125,41 +124,5 @@
             const calendarControl = new CalendarControl();
         });
       </script>
-
-<!--      <script>-->
-<!--          function generateCalendar(year, month, completedDays) {-->
-<!--              let calendarDiv = document.getElementById("calendar");-->
-<!--              calendarDiv.innerHTML = "";  // Avvalgi kalendardan tozalash-->
-
-<!--              let date = new Date(year, month, 1);-->
-<!--              let firstDay = date.getDay();-->
-<!--              let daysInMonth = new Date(year, month + 1, 0).getDate();-->
-
-<!--              for (let i = 0; i < firstDay; i++) {-->
-<!--                  let emptyDiv = document.createElement("div");-->
-<!--                  emptyDiv.classList.add("day");-->
-<!--                  calendarDiv.appendChild(emptyDiv);-->
-<!--              }-->
-
-<!--              for (let day = 1; day <= daysInMonth; day++) {-->
-<!--                  let dayDiv = document.createElement("div");-->
-<!--                  dayDiv.classList.add("day");-->
-<!--                  dayDiv.innerText = day;-->
-
-<!--                  if (completedDays.includes(day)) {-->
-<!--                      dayDiv.classList.add("done");  // Bajarilgan kun-->
-<!--                  } else {-->
-<!--                      dayDiv.classList.add("not-done");  // Bajarilmagan kun-->
-<!--                  }-->
-
-<!--                  calendarDiv.appendChild(dayDiv);-->
-<!--              }-->
-<!--          }-->
-
-<!--          // Bajarilgan kunlar ro'yxati (Backenddan keladigan ma'lumot)-->
-<!--          //let completedTodos = JSON.parse("{{ completed_tasks|safe }}");-->
-<!--           let completedTodos = [2, 5, 9, 15, 22];-->
-<!--          generateCalendar(2025, 1, completedTodos);-->
-<!--      </script>-->
   </body>
 </html>

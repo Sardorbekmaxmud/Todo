@@ -18,12 +18,8 @@ def dict_fetchall(cursor):
     ]
 
 
-def get_todo_by_id(todo_id):
+def get_():
     with closing(connection.cursor()) as cursor:
-        cursor.execute(f"""select to_do_todo.body, to_do_todo.created_at , 
-        to_do_todo.updated_at, auth_user.username, to_do_todohistory.status from to_do_todo 
-        inner join auth_user on to_do_todo.author_id = auth_user.id
-        left join to_do_todohistory on to_do_todo.id = to_do_todohistory.todo_id
-        where to_do_todo.id = {todo_id};""")
+        cursor.execute(f"""select 1+2;""")
         queryset = dict_fetchone(cursor)
         return queryset

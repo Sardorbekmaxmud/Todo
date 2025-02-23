@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Vazifa - Taxrirlash{% endblock %}
+{% block title %}Vazifa - Tahrirlash{% endblock %}
 
 {% block content %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,33 +17,45 @@
 
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
-        <div class="card-header">
-          <h2>Vazifaga O'zgartirish Kiritish</h2>
-        </div>
         <div class="card-body ">
+            <h2>Vazifani tahrirlash</h2>
+         </div>
+        <div class="card-body ">
+            <form id="editTodoForm" method="post">
+                {% csrf_token %}
 
-          <form action="{% url 'edit' todo.id 'none' %}" method="post">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-              <input required name="body" type="text" class="form-control" placeholder="Vazifa nomi" aria-label="Vazifa nomi" aria-describedby="button-addon2" value="{{ todo.body }}">
-              <button class="btn btn-warning me-2" type="submit" id="button-addon2">
-                Taxrirlash
-              </button>
-            </div>
-          </form>
+                <div class="mb-3">
+                    <label for="todoTitle" class="form-label">Todo Title</label>
+                    <input type="text" class="form-control" id="todoTitle" name="body" value="{{ todo.body }}" required>
+                </div>
 
-          <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-danger">
-              <i class="bi bi-x-circle"></i> Bajarilmadi
-            </button>
-          </form>
+                <div class="mb-3">
+                    <label class="form-label">Repeat Days:</label>
+                    <div id="repeatDaysContainer">
+                        {% for day in week_days %}
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="repeat_days[]" value="{{ day }}" id="day_{{ day }}"
+                                    {% if day in repeat_days %}
+                                       checked
+                                    {% endif %}>
+                                <label class="form-check-label" for="day_{{ day }}">{{ day }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
+                <button class="btn btn-warning me-2" type="submit" id="button-addon2">
+                    Taxrirlash
+                </button>
+            </form>
         </div>
-
       </div>
+
       <a href="{% url 'to_do' %}" class="btn btn-primary mt-3 ms-3">
           <i class="bi bi-backspace"></i> Ortga
       </a>
     </div>
+
+
+
 {% endblock %}
