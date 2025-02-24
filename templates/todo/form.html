@@ -25,12 +25,12 @@
                 {% csrf_token %}
 
                 <div class="mb-3">
-                    <label for="todoTitle" class="form-label">Todo Title</label>
+                    <label for="todoTitle" class="form-label">Vazifa nomi</label>
                     <input type="text" class="form-control" id="todoTitle" name="body" value="{{ todo.body }}" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Repeat Days:</label>
+                    <label class="form-label">Takrorlanish Kunlari:</label>
                     <div id="repeatDaysContainer">
                         {% for day in week_days %}
                             <div class="form-check">

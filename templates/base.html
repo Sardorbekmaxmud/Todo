@@ -92,7 +92,7 @@
               let savedTheme = localStorage.getItem("theme") || "light";
               document.documentElement.setAttribute("data-bs-theme", savedTheme);
 
-              // Agar oldingi rejim dark bo‘lsa, ikonani o‘zgartiramiz
+              // Agar oldingi rejim dark bo‘lsa, ikonkani o‘zgartiramiz
               if (savedTheme === "dark") {
                   themeIcon.classList.replace("fa-moon", "fa-sun");
               }
@@ -117,12 +117,6 @@
           var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
               return new bootstrap.Tooltip(tooltipTriggerEl);
           });
-      </script>
-
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const calendarControl = new CalendarControl();
-        });
       </script>
   </body>
 </html>
