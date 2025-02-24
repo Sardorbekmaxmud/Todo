@@ -28,11 +28,11 @@
             </li>
           </ul>
 
-          <button id="themeToggle" class="btn btn-dark ms-3">
+          <button id="themeToggle" class="btn btn-dark rounded-circle">
               <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
 
-          <a href="{% url 'logout' %}" class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
+          <a href="{% url 'logout' %}" class="btn btn-danger ms-1 rounded-end-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
             <i class="bi bi-box-arrow-right"></i>
           </a>
 
@@ -113,5 +113,10 @@
 
         </div>
       </div>
+        <div class="text-center mt-3">
+            {% include 'paginator.html' %}
+        </div>
+
     </div>
+
 {% endblock %}

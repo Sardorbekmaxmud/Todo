@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View
+from django.views import View, generic
 from django.shortcuts import render
 from django.db.models import Q
 from django.utils import timezone
@@ -49,10 +49,10 @@ class ToDoView(LoginRequiredMixin, View):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-class AllToDosView(LoginRequiredMixin, View):
-    def get(self, request):
-        all_todos = ToDo.objects.filter(author=request.user).order_by('-created_at')
+class AllToDosView(LoginRequiredMixin, generic.ListView):
+    context_object_name = 'all_todos'
+    paginate_by = 5
+    template_name = 'todo/all_todos.html'
 
-        return render(request=request,
-                      template_name='todo/all_todos.html',
-                      context={'all_todos': all_todos})
+    def get_queryset(self):
+        return ToDo.objects.filter(author=self.request.user).order_by('-created_at')

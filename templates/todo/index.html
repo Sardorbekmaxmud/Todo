@@ -9,18 +9,18 @@
 
 {% block content %}
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {% if messages %}
-        {% for message in messages %}
-            <script>
-                Swal.fire({
-                    icon: "error",
-                    title: "Xatolik!",
-                    text: "{{ message }}",
-                });
-            </script>
-        {% endfor %}
-    {% endif %}
+<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+<!--    {% if messages %}-->
+<!--        {% for message in messages %}-->
+<!--            <script>-->
+<!--                Swal.fire({-->
+<!--                    icon: "error",-->
+<!--                    title: "Xatolik!",-->
+<!--                    text: "{{ message }}",-->
+<!--                });-->
+<!--            </script>-->
+<!--        {% endfor %}-->
+<!--    {% endif %}-->
 
     <nav class="shadow navbar navbar-expand-lg bg-primary-subtle text-primary-emphasis">
       <div class="container-fluid">
@@ -42,11 +42,11 @@
             </li>
           </ul>
 
-          <button id="themeToggle" class="btn btn-dark ms-3">
+          <button id="themeToggle" class="btn btn-dark rounded-circle">
               <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
 
-          <a href="{% url 'logout' %}" class="btn btn-danger m-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
+          <a href="{% url 'logout' %}" class="btn btn-danger ms-1 rounded-end-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
             <i class="bi bi-box-arrow-right"></i>
           </a>
 
@@ -56,73 +56,78 @@
 
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
+        <div class="card-body">
+            <form id="todo-form" method="post">
+              {% csrf_token %}
+                <label for="todo-body" class="form-label fw-bold">Yangi Vazifa Nomi:</label>
+                <input type="text" id="todo-body" name="body" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2" required>
+
+                <p class="form-label fw-bold mt-2">Takrorlanish kunlari:</p>
+                  <div id="repeat-days" class="container mt-3">
+                    <div class="row">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" id="selectAll"> Har kuni
+                        </label>
+                        <br><br>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="monday" name="repeat_days" value="0">
+                                <label class="form-check-label" for="monday">Dushanba</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="tuesday" name="repeat_days" value="1">
+                                <label class="form-check-label" for="tuesday">Seshanba</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="wednesday" name="repeat_days" value="2">
+                                <label class="form-check-label" for="wednesday">Chorshanba</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="thursday" name="repeat_days" value="3">
+                                <label class="form-check-label" for="thursday">Payshanba</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="friday" name="repeat_days" value="4">
+                                <label class="form-check-label" for="friday">Juma</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="saturday" name="repeat_days" value="5">
+                                <label class="form-check-label" for="saturday">Shanba</label>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-check">
+                                <input class="form-check-input dayCheckbox" type="checkbox" id="sunday" name="repeat_days" value="6">
+                                <label class="form-check-label" for="sunday">Yakshanba</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifani qo'shish</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <div style="opacity: 85%" class="container mt-5">
+      <div class="card">
         <div class="card-header">
           <h4>Bugungi Vazifalaringiz Ro'yxati</h4>
         </div>
         <div class="card-body ">
-
-          <form id="todo-form" method="post">
-          {% csrf_token %}
-            <label for="todo-body" class="form-label fw-bold">Vazifa nomi:</label>
-            <input type="text" id="todo-body" name="body" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2" required>
-
-            <p class="form-label fw-bold mt-2">Takrorlanish kunlari:</p>
-              <div id="repeat-days" class="container mt-3">
-                <div class="row">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="selectAll"> Har kuni
-                    </label>
-                    <br><br>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="monday" name="repeat_days" value="0">
-                            <label class="form-check-label" for="monday">Dushanba</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="tuesday" name="repeat_days" value="1">
-                            <label class="form-check-label" for="tuesday">Seshanba</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="wednesday" name="repeat_days" value="2">
-                            <label class="form-check-label" for="wednesday">Chorshanba</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="thursday" name="repeat_days" value="3">
-                            <label class="form-check-label" for="thursday">Payshanba</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="friday" name="repeat_days" value="4">
-                            <label class="form-check-label" for="friday">Juma</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="saturday" name="repeat_days" value="5">
-                            <label class="form-check-label" for="saturday">Shanba</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <div class="form-check">
-                            <input class="form-check-input dayCheckbox" type="checkbox" id="sunday" name="repeat_days" value="6">
-                            <label class="form-check-label" for="sunday">Yakshanba</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group mb-3">
-              <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifani qo'shish</button>
-            </div>
-        </form>
-
           <ul id="todo-list" class="list-group list-group-numbered mt-5">
             {% for todo in todos %}
               {% if todo.status %}
@@ -132,7 +137,14 @@
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">
                         <del>{{ todo.body }}</del>
-<!--                        <del>{{ tod.body|truncatechars:18 }}</del>-->
+<!--                        {% if tod.body|length <= 18 %}-->
+<!--                            <del>{{ tod.body }}</del>-->
+                        <!--                        {% else %}-->
+                        <!--                            <del>{{ tod.body|truncatechars:18 }}</del>-->
+                        <!--                        {% endif %}-->
+<!--                        <span class="d-inline-block text-truncate" style="max-width: 150px;">-->
+<!--                          <del>{{ tod.body }}</del>-->
+<!--                        </span>-->
                     </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
@@ -168,7 +180,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item text-bg-secondary">
                                         Batafsil
                                     </a>
                                 </li>
@@ -196,7 +208,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </li>
               {% else %}
                 <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -204,84 +215,90 @@
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">
                         {{ todo.body }}
-<!--                        {{ tod.body|truncatechars:18 }}-->
+<!--                        {% if tod.body|length <= 18 %}-->
+<!--                            {{ tod.body }}    -->
+<!--                        {% else %}-->
+                        <!--                            {{ tod.body|truncatechars:18 }}-->
+                        <!--                        {% endif %}-->
+<!--                        <span class="d-inline-block text-truncate" style="max-width: 150px;">-->
+<!--                          {{ tod.body }}-->
+<!--                       </span>-->
                     </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
 
+                  <div class="d-flex flex-wrap gap-2">
+                    <!-- Katta ekranda ko‘rinadigan tugmalar -->
+                    <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
+                        <i class="bi bi-search"></i>
+                    </a>
+                    <form action="{% url 'action' todo.id 'done' %}" method="post">
+                    {% csrf_token %}
+                        <button class="btn btn-success d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarildi">
+                            <i class="bi bi-check-all"></i>
+                        </button>
+                    </form>
+                    <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                    {% csrf_token %}
+                        <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
+                          <i class="bi bi-x-circle"></i>
+                        </button>
+                    </form>
 
-                    <div class="d-flex flex-wrap gap-2">
-                        <!-- Katta ekranda ko‘rinadigan tugmalar -->
-                        <a href="{% url 'todo_detail' todo.id %}" class="btn btn-info d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Batafsil">
-                            <i class="bi bi-search"></i>
-                        </a>
-                        <form action="{% url 'action' todo.id 'done' %}" method="post">
-                        {% csrf_token %}
-                            <button class="btn btn-success d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarildi">
-                                <i class="bi bi-check-all"></i>
-                            </button>
-                        </form>
-                        <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
-                        {% csrf_token %}
-                            <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
-                              <i class="bi bi-x-circle"></i>
-                            </button>
-                        </form>
+                    <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxrirlash">
+                      <i class="bi bi-pencil-fill"></i>
+                    </a>
 
-                        <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxrirlash">
-                          <i class="bi bi-pencil-fill"></i>
-                        </a>
+                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                    {% csrf_token %}
+                        <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="O'chirish">
+                              <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
 
-                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                        {% csrf_token %}
-                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="O'chirish">
-                                  <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
-
-                        <!-- Telefon ekranda ko‘rinadigan dropdown -->
-                        <div class="dropdown d-sm-none">
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown">
-                                <img style="width: 20px; height: 20px; object-fit: contain;" src="/media/images/down-arrow_10255603.png" alt="dropdown">
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item">
-                                        Batafsil
-                                    </a>
-                                </li>
-                                <li>
-                                    <form action="{% url 'action' todo.id 'done' %}" method="post">
-                                    {% csrf_token %}
-                                        <button style="color: #00ff0b;" class="dropdown-item">
-                                            Bajarildi
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
-                                    {% csrf_token %}
-                                        <button style="color: #d63384;" class="dropdown-item">
-                                          Bajarilmadi
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
-                                        Taxrirlash
-                                    </a>
-                                </li>
-                                <li>
-                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                                    {% csrf_token %}
-                                        <button style="color: #ff1900;" class="dropdown-item">
-                                            O'chirish
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                    <!-- Telefon ekranda ko‘rinadigan dropdown -->
+                    <div class="dropdown d-sm-none">
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown">
+                            <img style="width: 20px; height: 20px; object-fit: contain;" src="/media/images/down-arrow_10255603.png" alt="dropdown">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item">
+                                    Batafsil
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{% url 'action' todo.id 'done' %}" method="post">
+                                {% csrf_token %}
+                                    <button style="color: #00ff0b;" class="dropdown-item">
+                                        Bajarildi
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="{% url 'edit' todo.id 'not_done' %}" method="post">
+                                {% csrf_token %}
+                                    <button style="color: #d63384;" class="dropdown-item">
+                                      Bajarilmadi
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
+                                    Taxrirlash
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{% url 'action' todo.id 'delete' %}" method="post">
+                                {% csrf_token %}
+                                    <button style="color: #ff1900;" class="dropdown-item">
+                                        O'chirish
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
+                  </div>
 
                 </li>
               {% endif %}
@@ -290,9 +307,8 @@
               <p class="form-label">Ayni vaqtda vazifalar ro'yxati bo'sh.</p>
             {% endfor %}
           </ul>
-
+        </div>
       </div>
-    </div>
     </div>
 
     <script>
