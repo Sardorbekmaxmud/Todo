@@ -145,4 +145,5 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('DOMEN')
+CSRF_TRUSTED_ORIGINS = os.getenv('DOMENS', '').split(',')
+CSRF_COOKIE_SECURE = True
