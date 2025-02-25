@@ -171,11 +171,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-staticfiles/
-staticfiles
-media/
-media
-
 *.bat
 reset_todos.bat
 
