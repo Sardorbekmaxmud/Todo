@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Bugungi Vazifalar {% endblock %}
+{% block title %} Vazifalar {% endblock %}
 
 {% block background_image %}
     background-image: url('https://steamuserimages-a.akamaihd.net/ugc/1644339686433514008/B0CD0FAE85EA41DD8C11B3C38E3C4DE4C602F646/?imw=512&amp;imh=309&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true');
@@ -180,7 +180,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item text-bg-secondary">
+                                    <a style="color: #0dcaf0;" href="{% url 'todo_detail' todo.id %}" class="dropdown-item">
                                         Batafsil
                                     </a>
                                 </li>
