@@ -16,7 +16,7 @@ class ToDoView(LoginRequiredMixin, View):
         todos = (ToDo.objects.prefetch_related('todo_repeats').filter(
             Q(author=request.user) &
             (Q(todo_repeats__repeat_day=today_week_num) | Q(todo_repeats__repeat_day=None))
-        ).order_by('status', 'body').values('id', 'body', 'created_at', 'status'))
+        ).order_by('-status', 'body').values('id', 'body', 'created_at', 'status'))
 
         return render(request=request,
                       template_name='todo/index.html',
