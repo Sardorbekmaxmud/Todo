@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ToDo, ToDoRepeat, ToDoHistory
+from .models import ToDo, ToDoRepeat, ToDoHistory, ResetTodos
 
 
 # Register your models here.
@@ -26,6 +26,9 @@ class ToDoHistoryAdmin(admin.ModelAdmin):
     ordering = ('date',)
     readonly_fields = ['date', 'updated_at']
 
-    class Meta:
-        db_name = 'todo_history'
-        verbose_name_plural = 'todo_histories'
+
+@admin.register(ResetTodos)
+class ResetTodosAdmin(admin.ModelAdmin):
+    list_display = ('date',)
+    list_filter = ('date',)
+    readonly_fields = ['date',]

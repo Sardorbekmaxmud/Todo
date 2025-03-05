@@ -8,7 +8,7 @@ User = get_user_model()
 class ToDo(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.CharField(max_length=250, null=True, blank=True)
-    status = models.BooleanField(default=False, null=True)
+    status = models.BooleanField(default=None, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -38,3 +38,4 @@ class ToDoHistory(models.Model):
 
     class Meta:
         unique_together = ('todo', 'date', 'status')
+        verbose_name_plural = 'todo_histories'
