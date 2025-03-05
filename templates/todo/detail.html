@@ -51,8 +51,10 @@
             <p><strong>Hozirgi holati:</strong>
                 {% if todo.status %}
                     ✅<i> Bajarilgan</i>
-                {% else %}
+                {% elif todo.status == False %}
                     ❌<i> Bajarilmagan</i>
+                {% else %}
+                    ⚠️<i></i>No'malum
                 {% endif %}
             </p>
             <p><strong>Takrorlanish kunlari:</strong>
