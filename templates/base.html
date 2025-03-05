@@ -118,5 +118,21 @@
               return new bootstrap.Tooltip(tooltipTriggerEl);
           });
       </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Oldingi scroll holatini olish
+            const scrollPosition = localStorage.getItem("scrollPosition");
+            if (scrollPosition) {
+                window.scrollTo(0, scrollPosition);
+            }
+        });
+
+        // Scroll pozitsiyani saqlash
+        window.addEventListener("scroll", function () {
+            localStorage.setItem("scrollPosition", window.scrollY);
+        });
+    </script>
+
   </body>
 </html>

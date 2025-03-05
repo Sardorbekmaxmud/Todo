@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'name': 'password1',
                                                                   }))
     password2 = forms.CharField(max_length=50,
-                                help_text='Verifikatsiya uchun oldin kiritgan parolingizni kiriting!',
+                                help_text='Verifikatsiya uchun parolingizni takroran yozing!',
                                 required=True,
                                 label="Parolni takrorlang:",
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Parol',
