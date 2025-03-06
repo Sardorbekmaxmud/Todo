@@ -10,22 +10,28 @@ class ResetTodosMiddleware:
 
     def __call__(self, request):
         today = now().date()
-        try:
-            last_reset = ResetTodos.objects.get(date=today)
-        except ResetTodos.DoesNotExist:
-            last_reset = None
+        today_week_num = now().weekday()
+
+        last_reset = ResetTodos.objects.filter(date=today).first()
+
+        todos = ToDo.objects.prefetch_related('todo_repeats').filter(
+            Q(todo_repeats__repeat_day=today_week_num) &
+            Q(status=True) | Q(status=False))
 
         if last_reset is None:
+            todos.update(status=None)
+
+            ResetTodos.objects.create(date=today)
+
             response = self.get_response(request)
             return response
 
-        elif last_reset.date is None or last_reset.date < today:
-            today_week_num = now().weekday()
+        elif last_reset.date:
+            ResetTodos.objects.exclude(date=today).delete()
 
-            ToDo.objects.prefetch_related('todo_repeats').filter(
-                Q(todo_repeats__repeat_day=today_week_num) &
-                Q(status=True) | Q(status=False)).update(status=None)
-            ResetTodos.objects.create(date=today)
+            response = self.get_response(request)
+            return response
 
-        response = self.get_response(request)
-        return response
+        else:
+            response = self.get_response(request)
+            return response
