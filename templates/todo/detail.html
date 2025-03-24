@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <nav class="shadow mb-5 navbar navbar-expand-lg bg-primary-subtle text-primary-emphasis">
+    <nav class="shadow mb-5 navbar navbar-expand-lg text-primary-emphasis">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'to_do' %}">
             <img style="width: 40px; height: auto;" src="https://avatars.dzeninfra.ru/get-zen-logos/1597769/pub_62730f844015cd0dfeac9904_6288a204a70c7938bb2d4a31/xxh" alt="ToDo">
@@ -20,14 +20,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bugungi Vazifalar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'create' %}">Vazifa yaratish</a>
+            </li>
           </ul>
 
-          <button id="themeToggle" class="btn btn-dark rounded-circle">
+          <button id="themeToggle" class="btn btn-dark">
               <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
 

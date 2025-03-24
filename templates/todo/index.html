@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} Vazifalar {% endblock %}
+{% block title %} Bugungi Vazifalar {% endblock %}
 
 {% block background_image %}
     background-image: url('https://i.pinimg.com/originals/0c/1c/8f/0c1c8ff41ac0ddb2cd36bdf6a49bbc11.jpg');
 {% endblock %}
 
 {% block content %}
-    <nav class="shadow navbar navbar-expand-lg bg-primary-subtle text-primary-emphasis">
+    <nav class="shadow navbar navbar-expand-lg  text-primary-emphasis">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'to_do' %}">
             <img style="width: 40px; height: auto;" src="https://avatars.dzeninfra.ru/get-zen-logos/1597769/pub_62730f844015cd0dfeac9904_6288a204a70c7938bb2d4a31/xxh" alt="ToDo">
@@ -21,14 +21,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bosh sahifa</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bugungi Vazifalar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'create' %}">Vazifa yaratish</a>
+            </li>
           </ul>
 
-          <button id="themeToggle" class="btn btn-dark rounded-circle">
+          <button id="themeToggle" class="btn btn-dark">
               <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
 
@@ -39,74 +42,6 @@
         </div>
       </div>
     </nav>
-
-    <div style="opacity: 85%" class="container mt-5">
-      <div class="card">
-        <div class="card-body">
-            <form id="todo-form" method="post">
-              {% csrf_token %}
-                <label for="todo-body" class="form-label fw-bold">Yangi Vazifa Nomi:</label>
-                <input type="text" id="todo-body" name="body" class="form-control" placeholder="Keling yangi vazifa yaratamiz!" aria-label="Keling yangi vazifa yaratamiz!" aria-describedby="button-addon2" required>
-
-                <p class="form-label fw-bold mt-2">Takrorlanish kunlari:</p>
-                  <div id="repeat-days" class="container mt-3">
-                    <div class="row">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" id="selectAll"> Har kuni
-                        </label>
-                        <br><br>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="monday" name="repeat_days" value="0">
-                                <label class="form-check-label" for="monday">Dushanba</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="tuesday" name="repeat_days" value="1">
-                                <label class="form-check-label" for="tuesday">Seshanba</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="wednesday" name="repeat_days" value="2">
-                                <label class="form-check-label" for="wednesday">Chorshanba</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="thursday" name="repeat_days" value="3">
-                                <label class="form-check-label" for="thursday">Payshanba</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="friday" name="repeat_days" value="4">
-                                <label class="form-check-label" for="friday">Juma</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="saturday" name="repeat_days" value="5">
-                                <label class="form-check-label" for="saturday">Shanba</label>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="form-check">
-                                <input class="form-check-input dayCheckbox" type="checkbox" id="sunday" name="repeat_days" value="6">
-                                <label class="form-check-label" for="sunday">Yakshanba</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group mb-3">
-                  <button class="btn btn-success mt-3" type="submit" id="button-addon2">Vazifani qo'shish</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
 
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
@@ -375,12 +310,5 @@
         </div>
       </div>
     </div>
-
-    <script>
-        document.getElementById("selectAll").addEventListener("change", function () {
-            let checkboxes = document.querySelectorAll(".dayCheckbox");
-            checkboxes.forEach(cb => cb.checked = this.checked);
-        });
-    </script>
 
 {% endblock %}
