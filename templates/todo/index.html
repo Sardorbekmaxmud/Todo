@@ -304,11 +304,30 @@
               {% endif %}
 
             {% empty %}
-              <p class="form-label">Ayni vaqtda vazifalar ro'yxati bo'sh.</p>
+              <p class="form-label text-center fs-4 text-warning">
+                  Ayni vaqtda vazifalar ro'yxati bo'sh
+              </p>
             {% endfor %}
           </ul>
         </div>
       </div>
     </div>
+
+    {% if not todos %}
+        <div class="text-center mt-3">
+            <!-- From Uiverse.io by mi-series -->
+            <div>
+                <a href="{% url 'create' %}">
+                    <button class="btn2">
+                        <i class="animation"></i>
+                            Vazifa yaratish
+                        <i class="animation"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+    {% endif %}
+
 
 {% endblock %}
