@@ -12,17 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="{% static 'js/main.js' %}"></script>
 
+    <script src="{% static 'js/main.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         body {
             background-blend-mode: multiply;
-            {% block background_image %}{% endblock %}
-            background-size: cover;
-            background-position: center;
-            background-repeat: repeat; /* no-repeat; */
+            {% block background_image %} {% endblock %} /* Rasmni yuklash */
+            background-size: cover; /* Rasmni ekran o‘lchamiga moslashtirish */
+            background-position: center; /* Markazga joylash */
+            background-attachment: fixed;
+            background-repeat: no-repeat; /* repeat; */
             height: 100vh;
             width: 100%;
         }
@@ -30,6 +31,15 @@
             background-color: #080808;
             color: white;
         }
+        .navbar {
+            background-color: rgba(225, 235, 233, 0.5);
+            backdrop-filter: blur(7px); /* Orqa fonni biroz xiralashtiramiz */
+        }
+        .navbar.dark-mode {
+           background-color: rgba(33, 37, 36, 0.5) !important;
+            backdrop-filter: blur(7px) !important;
+        }
+
     </style>
 
   </head>
@@ -42,74 +52,80 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+<!--  form dagi yangi vazifani yuborib main page o'tkazib beradi  -->
     <script>
       document.getElementById('todo-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Formaning odatiy submit jarayonini to'xtatish
-        // Inputdan vazifa nomini olish
-        const taskBody = document.getElementById('todo-body').value.trim();
+            event.preventDefault(); // Formani to'xtatamiz
 
-        // Tanlangan kunlarni yig'ish
-        const repeatDays = [];
-        document.querySelectorAll('input[name="repeat_days"]:checked').forEach(function(checkbox) {
-        repeatDays.push(checkbox.value);
+            // Inputdan vazifa nomini olish
+            const taskBody = document.getElementById('todo-body').value.trim();
+
+            // Tanlangan kunlarni yig'ish
+            const repeatDays = [];
+            document.querySelectorAll('input[name="repeat_days"]:checked').forEach(function(checkbox) {
+                repeatDays.push(checkbox.value);
+            });
+
+            // Agar vazifa nomi bo'sh bo'lmasa
+            if (taskBody !== '') {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '{% url "to_do" %}', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}'); // CSRF tokenini yuborish
+
+                xhr.onload = function() {
+                    if (xhr.status === 200 || xhr.status === 302) {
+                        window.location.href = "/";  // Sahifani yangilash
+                    } else {
+                        console.error("Xatolik:", xhr.responseText);
+                    }
+                };
+
+                const data = JSON.stringify({
+                    body: taskBody,
+                    repeat_days: repeatDays
+                });
+
+                xhr.send(data);
+            }
         });
-
-        // Agar vazifa nomi bo'sh bo'lmasa
-        if (taskBody !== '') {
-        // AJAX so'rovini yuborish
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '{% url 'to_do' %}', true); // Serverga so'rov yuborish
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}'); // CSRF tokenini yuborish
-
-        // Serverga yuboriladigan ma'lumotlar
-                      const data = JSON.stringify({
-                          body: taskBody,
-                          repeat_days: repeatDays
-                      });
-
-                      xhr.send(data);
-                  }
-              });
       </script>
 
-  <!--    Yangi vazifa qo'shsa page ni yangilab beradi-->
-      <script>
-          document.getElementById("todo-form").addEventListener("submit", function() {
-              setTimeout(() => {
-                  location.reload();
-              }, 100); // 0.5 soniya kutib yangilaydi
-          });
-      </script>
-
+    <!-- Change Dark to Light mode js code-->
       <script>
           document.addEventListener("DOMContentLoaded", function () {
-              const themeToggle = document.getElementById("themeToggle");
-              const themeIcon = document.getElementById("themeIcon");
+            const themeToggle = document.getElementById("themeToggle");
+            const themeIcon = document.getElementById("themeIcon");
+            const navbar = document.querySelector(".navbar");
 
-              // Oldingi tanlangan mavzuni o‘qib olish
-              let savedTheme = localStorage.getItem("theme") || "light";
-              document.documentElement.setAttribute("data-bs-theme", savedTheme);
+            let savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-bs-theme", savedTheme);
 
-              // Agar oldingi rejim dark bo‘lsa, ikonkani o‘zgartiramiz
-              if (savedTheme === "dark") {
-                  themeIcon.classList.replace("fa-moon", "fa-sun");
-              }
+            // Dark mode bo'lsa, navbar classiga qo'shamiz
+            if (savedTheme === "dark") {
+                themeIcon.classList.replace("fa-moon", "fa-sun");
+                navbar.classList.add("dark-mode");
+            } else {
+                navbar.classList.remove("dark-mode");
+            }
 
-              // Tugmani bosganda rejimni o‘zgartirish
-              themeToggle.addEventListener("click", function () {
-                  let currentTheme = document.documentElement.getAttribute("data-bs-theme");
-                  let newTheme = currentTheme === "dark" ? "light" : "dark";
+            themeToggle.addEventListener("click", function () {
+                let currentTheme = document.documentElement.getAttribute("data-bs-theme");
+                let newTheme = currentTheme === "dark" ? "light" : "dark";
 
-                  // Mavzuni o‘zgartirish
-                  document.documentElement.setAttribute("data-bs-theme", newTheme);
-                  localStorage.setItem("theme", newTheme);
+                document.documentElement.setAttribute("data-bs-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
 
-                  // Ikonani o‘zgartirish
-                  themeIcon.classList.replace(newTheme === "dark" ? "fa-moon" : "fa-sun", newTheme === "dark" ? "fa-sun" : "fa-moon");
-              });
-          });
+                // Navbarga dark mode classini qo'shish yoki olib tashlash
+                if (newTheme === "dark") {
+                    navbar.classList.add("dark-mode");
+                    themeIcon.classList.replace("fa-moon", "fa-sun");
+                } else {
+                    navbar.classList.remove("dark-mode");
+                    themeIcon.classList.replace("fa-sun", "fa-moon");
+                }
+            });
+        });
       </script>
 
       <script>
@@ -131,6 +147,14 @@
         // Scroll pozitsiyani saqlash
         window.addEventListener("scroll", function () {
             localStorage.setItem("scrollPosition", window.scrollY);
+        });
+    </script>
+
+    <!--Hafta kunlarini bir dan tanlash-->
+    <script>
+        document.getElementById("selectAll").addEventListener("change", function () {
+            let checkboxes = document.querySelectorAll(".dayCheckbox");
+            checkboxes.forEach(cb => cb.checked = this.checked);
         });
     </script>
 

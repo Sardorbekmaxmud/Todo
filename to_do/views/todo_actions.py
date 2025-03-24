@@ -19,9 +19,6 @@ class ToDoActionView(LoginRequiredMixin, View):
                     todo=todo,
                     date=timezone.now().date()
                 )
-                # if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
-                #     messages.error(request, "Bajarilmagan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
-                #     return redirect('to_do')
 
                 todo_history.status = True
                 todo_history.save()
@@ -62,10 +59,6 @@ class ToDoEditView(LoginRequiredMixin, View):
                     todo=todo,
                     date=timezone.now().date()
                 )
-
-                # if not created and todo_history.status and (timezone.now() - todo_history.updated_at) > timezone.timedelta(minutes=10):
-                #     messages.error(request, "Bajarilgan vazifani 10 daqiqadan keyin bekor qilib bolmaydi.")
-                #     return redirect('edit', tod.id, 'none')
 
                 todo_history.status = False
                 todo_history.save()

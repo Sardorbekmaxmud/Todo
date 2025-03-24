@@ -34,6 +34,14 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    # default
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
     # local
     'to_do',
 
@@ -42,13 +50,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     'whitenoise.runserver_nostatic',
 
-    # default
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -98,7 +99,6 @@ DATABASES = {
     #         'NAME': BASE_DIR / 'db.sqlite3',
     #     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

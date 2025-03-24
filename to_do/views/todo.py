@@ -1,15 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View, generic
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.views import View
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.utils import timezone
-from django.http import JsonResponse
 import json
 
 from to_do.models import ToDo, ToDoRepeat
 
 
-class ToDoView(LoginRequiredMixin, View):
+class ToDoTodayView(LoginRequiredMixin, View):
     def get(self, request):
         today_week_num = timezone.now().weekday()
 
@@ -41,18 +41,9 @@ class ToDoView(LoginRequiredMixin, View):
                     ToDoRepeat(todo=todo, repeat_day=day) for day in repeat_days
                 ])
 
-            return JsonResponse({'success': True}, status=200)
+            return redirect('to_do')
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
-
-
-class AllToDosView(LoginRequiredMixin, generic.ListView):
-    context_object_name = 'all_todos'
-    paginate_by = 5
-    template_name = 'todo/all_todos.html'
-
-    def get_queryset(self):
-        return ToDo.objects.filter(author=self.request.user).order_by('-created_at')
