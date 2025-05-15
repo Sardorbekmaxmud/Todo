@@ -8,47 +8,15 @@
 {% endblock %}
 
 {% block content %}
-    <nav class="shadow navbar navbar-expand-lg  text-primary-emphasis">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'to_do' %}">
-            <img style="width: 40px; height: auto;" src="https://avatars.dzeninfra.ru/get-zen-logos/1597769/pub_62730f844015cd0dfeac9904_6288a204a70c7938bb2d4a31/xxh" alt="ToDo">
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bugungi Vazifalar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'create' %}">Vazifa yaratish</a>
-            </li>
-          </ul>
-
-          <button id="themeToggle" class="btn btn-dark">
-              <i id="themeIcon" class="fa-solid fa-moon"></i>
-          </button>
-
-          <a href="{% url 'logout' %}" class="btn btn-danger ms-1 rounded-end-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Tizimdan chiqish">
-            <i class="bi bi-box-arrow-right"></i>
-          </a>
-
-        </div>
-      </div>
-    </nav>
-
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
         <div class="card-header">
           <h4>Bugungi Vazifalaringiz Ro'yxati</h4>
         </div>
-        <div class="card-body ">
+        <div class="card-body">
+            {% if todos %}
+                <h5>Kunlik rejalaringizni bajaring va o'zingizni baxtiyor his eting!</h5>
+            {% endif %}
           <ul id="todo-list" class="list-group list-group-numbered mt-5">
             {% for todo in todos %}
               {% if todo.status %}
@@ -58,14 +26,6 @@
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">
                         <del class="text-success-emphasis">{{ todo.body }}</del>
-<!--                        {% if tod.body|length <= 18 %}-->
-<!--                            <del>{{ tod.body }}</del>-->
-                        <!--                        {% else %}-->
-                        <!--                            <del>{{ tod.body|truncatechars:18 }}</del>-->
-                        <!--                        {% endif %}-->
-<!--                        <span class="d-inline-block text-truncate" style="max-width: 150px;">-->
-<!--                          <del>{{ tod.body }}</del>-->
-<!--                        </span>-->
                     </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
@@ -80,17 +40,6 @@
                         {% csrf_token %}
                             <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
                               <i class="bi bi-x-circle"></i>
-                            </button>
-                        </form>
-
-                        <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="Taxrirlash">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-
-                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="O'chirish">
-                                <i class="bi bi-trash"></i>
                             </button>
                         </form>
 
@@ -113,19 +62,6 @@
                                         </button>
                                     </form>
                                 </li>
-                                <li>
-                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
-                                        Taxrirlash
-                                    </a>
-                                </li>
-                                <li>
-                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                                    {% csrf_token %}
-                                        <button style="color: #ff1900;" class="dropdown-item">
-                                            O'chirish
-                                        </button>
-                                    </form>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -136,14 +72,6 @@
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">
                         <del style="color: #ff007d;">{{ todo.body }}</del>
-<!--                        {% if tod.body|length <= 18 %}-->
-<!--                            <del>{{ tod.body }}</del>-->
-                        <!--                        {% else %}-->
-                        <!--                            <del>{{ tod.body|truncatechars:18 }}</del>-->
-                        <!--                        {% endif %}-->
-<!--                        <span class="d-inline-block text-truncate" style="max-width: 150px;">-->
-<!--                          <del>{{ tod.body }}</del>-->
-<!--                        </span>-->
                     </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
@@ -158,17 +86,6 @@
                         {% csrf_token %}
                             <button class="btn btn-success d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarildi">
                                 <i class="bi bi-check-all"></i>
-                            </button>
-                        </form>
-
-                        <a methods="post" href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="Taxrirlash">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-
-                        <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top"  title="O'chirish">
-                                <i class="bi bi-trash"></i>
                             </button>
                         </form>
 
@@ -191,19 +108,6 @@
                                     </button>
                                 </form>
                             </li>
-                                <li>
-                                    <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
-                                        Taxrirlash
-                                    </a>
-                                </li>
-                                <li>
-                                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                                    {% csrf_token %}
-                                        <button style="color: #ff1900;" class="dropdown-item">
-                                            O'chirish
-                                        </button>
-                                    </form>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -215,14 +119,6 @@
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">
                         {{ todo.body }}
-<!--                        {% if tod.body|length <= 18 %}-->
-<!--                            {{ tod.body }}    -->
-<!--                        {% else %}-->
-                        <!--                            {{ tod.body|truncatechars:18 }}-->
-                        <!--                        {% endif %}-->
-<!--                        <span class="d-inline-block text-truncate" style="max-width: 150px;">-->
-<!--                          {{ tod.body }}-->
-<!--                       </span>-->
                     </div>
                     {{ todo.created_at|date:'d.m.Y H:i' }}
                   </div>
@@ -242,17 +138,6 @@
                     {% csrf_token %}
                         <button style="background-color: #d63384; color: white;" class="btn d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bajarilmadi">
                           <i class="bi bi-x-circle"></i>
-                        </button>
-                    </form>
-
-                    <a href="{% url 'edit' todo.id 'none' %}" class="btn btn-warning d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxrirlash">
-                      <i class="bi bi-pencil-fill"></i>
-                    </a>
-
-                    <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                    {% csrf_token %}
-                        <button class="btn btn-danger d-none d-sm-inline-block mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="O'chirish">
-                              <i class="bi bi-trash"></i>
                         </button>
                     </form>
 
@@ -280,19 +165,6 @@
                                 {% csrf_token %}
                                     <button style="color: #d63384;" class="dropdown-item">
                                       Bajarilmadi
-                                    </button>
-                                </form>
-                            </li>
-                            <li>
-                                <a style="color: orange;" methods="post" href="{% url 'edit' todo.id 'none' %}" class="dropdown-item">
-                                    Taxrirlash
-                                </a>
-                            </li>
-                            <li>
-                                <form action="{% url 'action' todo.id 'delete' %}" method="post">
-                                {% csrf_token %}
-                                    <button style="color: #ff1900;" class="dropdown-item">
-                                        O'chirish
                                     </button>
                                 </form>
                             </li>

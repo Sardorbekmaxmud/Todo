@@ -7,41 +7,6 @@
 {% endblock %}
 
 {% block content %}
-    <nav class="shadow mb-5 navbar navbar-expand-lg text-primary-emphasis">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'to_do' %}">
-            <img style="width: 40px; height: auto;" src="https://avatars.dzeninfra.ru/get-zen-logos/1597769/pub_62730f844015cd0dfeac9904_6288a204a70c7938bb2d4a31/xxh" alt="ToDo">
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'to_do' %}">Bugungi Vazifalar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'all_todos' %}">Barcha Vazifalar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'create' %}">Vazifa yaratish</a>
-            </li>
-          </ul>
-
-          <button id="themeToggle" class="btn btn-dark">
-              <i id="themeIcon" class="fa-solid fa-moon"></i>
-          </button>
-
-          <a href="{% url 'logout' %}" class="btn btn-danger ms-1 rounded-end-circle" data-bs-toggle="tooltip" data-bs-placement="left"  title="Tizimdan chiqish">
-            <i class="bi bi-box-arrow-right"></i>
-          </a>
-
-        </div>
-      </div>
-    </nav>
-
     <div style="opacity: 85%" class="container mt-5">
         <h2 style="text-align:center; font-size: 30px;" class="form-control fw-bold mb-3">{{ todo.body }}</h2>
 
@@ -57,13 +22,15 @@
                 {% elif todo.status == False %}
                     ❌<i> Bajarilmagan</i>
                 {% else %}
-                    ⚠️<i></i>No'malum
+                    ⚠️<i></i>Noma'lum
                 {% endif %}
             </p>
             <p><strong>Takrorlanish kunlari:</strong>
                 <ul>
                     {% for day in repeat_days %}
                         <li>{{ day }}</li>
+                    {% empty %}
+                        <li>Noma'lum</li>
                     {% endfor %}
                 </ul>
             </p>

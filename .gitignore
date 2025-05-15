@@ -168,6 +168,9 @@ cython_debug/
 .idea/
 .idea
 
+staticfiles/
+staticfiles
+
 # PyPI configuration file
 .pypirc
 

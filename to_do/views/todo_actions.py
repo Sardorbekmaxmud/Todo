@@ -23,24 +23,35 @@ class ToDoActionView(LoginRequiredMixin, View):
                 todo_history.status = True
                 todo_history.save()
 
+                return redirect('to_do')
+
             elif action == 'delete':
                 todo.delete()
-        return redirect('to_do')
+        return redirect('all_todos')
 
 
 class ToDoEditView(LoginRequiredMixin, View):
+
     def get(self, request, todo_id, action=None):
-        todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
+        todo = ToDo.objects.get(pk=todo_id, author=request.user)
+        existing_days = todo.todo_repeats.values_list('repeat_day', flat=True)
+        uz_weeks = {0: 'Dushanba', 1: 'Seshanba', 2: 'Chorshanba', 3: 'Payshanba', 4: 'Juma', 5: 'Shanba',
+                    6: 'Yakshanba'}
+        inv_uz_weeks = {v: k for k, v in uz_weeks.items()}
 
-        todo_repeat = ToDoRepeat.objects.filter(todo=todo)
+        # Translate numeric repeat days back to Uzbek names
+        repeat_days = [day for day in uz_weeks.values() if inv_uz_weeks[day] in existing_days]
 
-        uz_weeks = {0: 'Dushanba', 1: 'Seshanba', 2: 'Chorshanba', 3: 'Payshanba', 4: 'Juma', 5: 'Shanba', 6: 'Yakshanba'}
-        repeat_days = [uz_weeks[day.repeat_day] for day in todo_repeat]
+        context = {
+            'todo': todo,
+            'week_days': list(uz_weeks.values()),
+            'repeat_days': repeat_days  # Har doim list bo'ladi, bo'sh bo'lsa ham
+        }
 
-        week_days = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba']
         return render(request=request,
                       template_name='todo/form.html',
-                      context={'todo': todo, 'repeat_days': repeat_days, 'week_days': week_days})
+                      context=context,
+         )
 
     def post(self, request, todo_id, action=None):
         if request.POST:
@@ -63,6 +74,8 @@ class ToDoEditView(LoginRequiredMixin, View):
                 todo_history.status = False
                 todo_history.save()
 
+                return redirect('to_do')
+
             if body:
                 ToDo.objects.filter(pk=todo_id, author=request.user).update(body=body)
 
@@ -77,5 +90,9 @@ class ToDoEditView(LoginRequiredMixin, View):
                 ToDoRepeat.objects.bulk_create([
                     ToDoRepeat(todo=todo, repeat_day=day) for day in num_repeat_days
                 ])
+            else:
+                # Agar hech qanday kun tanlanmagan bo‘lsa, eski repeat_day'larni o‘chir
+                todo = ToDo.objects.filter(pk=todo_id, author=request.user).first()
+                todo.todo_repeats.all().delete()
 
-            return redirect('to_do')
+            return redirect('all_todos')

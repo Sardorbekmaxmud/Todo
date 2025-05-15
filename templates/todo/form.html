@@ -6,19 +6,6 @@
 {% endblock %}
 
 {% block content %}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {% if messages %}
-        {% for message in messages %}
-            <script>
-                Swal.fire({
-                    icon: "error",
-                    title: "Xatolik!",
-                    text: "{{ message }}",
-                });
-            </script>
-        {% endfor %}
-    {% endif %}
-
     <div style="opacity: 85%" class="container mt-5">
       <div class="card">
         <div class="card-body ">
@@ -55,11 +42,8 @@
         </div>
       </div>
 
-      <a href="{% url 'to_do' %}" class="btn btn-dark mt-3 ms-3">
+      <a href="{% url 'all_todos' %}" class="btn btn-dark mt-3 ms-3">
           <i class="bi bi-backspace"></i> Ortga
       </a>
     </div>
-
-
-
 {% endblock %}
